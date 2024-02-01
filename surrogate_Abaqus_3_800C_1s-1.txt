@@ -3,7 +3,7 @@
 # SGE options (whose lines must begin with #$)
 
 #$ -cwd               # Run the job in the current directory 
-source activate Abaqus_PYMC2
+source .venv/bin/activate
 module load apps/binapps/abaqus/2022
 #source $ABAQUS_HOME/liccheck.sh
 
