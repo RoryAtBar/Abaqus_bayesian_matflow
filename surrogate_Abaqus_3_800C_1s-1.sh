@@ -5,7 +5,6 @@
 #$ -cwd               # Run the job in the current directory 
 source .venv/bin/activate
 module load apps/binapps/abaqus/2022
-#source $ABAQUS_HOME/liccheck.sh
 
 #!/bin/sh
 SCRATCH=${HOME}/scratch
@@ -27,5 +26,5 @@ done
 cp "${DATADIR}/${ODBREADER}" "${SCRATCH}/${OUTPUTFILE}"
 cp "${DATADIR}/${PLASTICITYDATA}"  "${SCRATCH}/${OUTPUFILE}"
 cp "${DATADIR}/${MODEL}"  "${SCRATCH}/${OUTPUTFILE}/friction_conductance.inp"
-cd $OUTPUTFILE
+cd ${SCRATCH}/${OUTPUTFILE}
 python "${DATADIR}/${MAINSCRIPT}"  
