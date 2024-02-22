@@ -53,7 +53,7 @@ def call_abaqus_with_new_params(list_of_material_coefficients, original_inp_file
     if np.random.rand() > 0.9:
         subprocess.run(['mv','sub_script_check.odb',f'{file_count}.odb'])
         subprocess.run(['cp','friction_conductance.inp',f'{file_count}.inp'])
-    subprocess.run(['rm','sub_script_check*'])
+    subprocess.run(['rm', '-f', 'sub_script_check*'])
     #return compression_force
 
 def modify_friction(inp_text, coefficient_of_friction):
@@ -141,7 +141,7 @@ results_df['PEEQ Results'] = results_df['PEEQ Results'].astype(object)
 results_df['Temperature profile'] = results_df['Temperature profile'].astype(object)
 
 
-subprocess.run(['rm','sub_script_check*'])
+subprocess.run(['rm', '-f', 'sub_script_check*'])
 power_vals = np.linspace(power[0],power[1],samples_per_param)
 conductivity_vals = [[0,"800nocondC_heatup22.odb"],
                      [100,"80010C_heatup22.odb"],
