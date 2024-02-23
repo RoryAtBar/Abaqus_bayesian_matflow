@@ -33,11 +33,14 @@ implement most of the above steps, and the workflow runs as following:
    To do this it gathers together:
    
    - the python script that calls abaqus (surrogate_Abaqus_3_800C_1s-1.py),
-   - a python script that is run within Abaqus CAE  
+   
+   - a python script that is run within Abaqus CAE
      
      (`read_Force_PEEQ_NT11_barrelling_forcemac.py`) to extract data from
        output database (.odb) files,
+   
    - the basic Abaqus input file `800C_1s-1_step_19.inp`
+   
    - Some output databases from the folder Abaqus_5_min_heatup, for which
      the relevant one for a given sample is imported into Abaqus, and is
      selected by modifying the relevant line in the `800C_1s-1_step_19.inp`
@@ -110,35 +113,35 @@ implement most of the above steps, and the workflow runs as following:
    Pymc uses a context manager to build models. Once the sampling is
    complete , the data can be moved to a netcdf file for analysis in
    Jupyter.
-   
-   ## How to Use Previous work:
-   
-   Open `surrogate_Abaqus_3_800C_1s-1.txt`.
-   
-   Modify the following data:
-   
-   ```
-   OUTPUTFILE="SFCP_800C_1s-1_imprtedodbs_cond0-1500" # Desired output file location
-   MAINSCRIPT="surrogate_Abaqus_3_800C_1s-1.py" # Script to run
-   IMPORTTEMPFOLER="Abaqus_5_min_heatup/" # Location of heat up .odbs
-   TEMPERATUREODB="800" #Temperature leave as 800
-   TEMPERATUREODBITERATION='22' # Number of time steps in the heat up model. Leave as 22
-   MODEL="800C_1s-1_setup.inp" # Model name
-   PLASTICITYDATA="Patryk_mat_data.txt" # Possibly redundant code, ignore
-   ODBREADER="read_Force_PEEQ_NT11_barrelling_forcemac.py" # Script to read Abaqus outputs
-   SUBFOLDER="Abaqus/Friction_conductance/" # Where the script and .inp file is kept
-   ```
-   
-   Open `MCMC_800_1s-1.txt`
-   
-   Modify the following data:
-   
-   ```
-   OUTPUTFILE="MCMC_GPsurrgt_800C_1s-1_cond0-1500_20000_chain/" #Desired output file location
-   MAINSCRIPT="MCMC_800C_1s-1.py" # MCMC script, leave
-   MODELDATA="friction_conductance_power.pkl" # Name of the pickle file after running the previous script
-   MODELDATAFOLDER="scratch/SFCP_800C_1s-1_importedodbs_cond0-1500/" # Where the above pickle file is kept
-   SUBFOLDER="GP_surrogate_pymc/" # Where the MCMC script is kept
-   TESTDATAFOLDER= "Patryk_Force_time_data/" # Where the physical data Force-time data is kept
-   TESTDATA="800C_1s-1_csv.csv" # Physical data file
-   ```
+
+## How to Use Previous work:
+
+Open `surrogate_Abaqus_3_800C_1s-1.txt`.
+
+Modify the following data:
+
+```
+OUTPUTFILE="SFCP_800C_1s-1_imprtedodbs_cond0-1500" # Desired output file location
+MAINSCRIPT="surrogate_Abaqus_3_800C_1s-1.py" # Script to run
+IMPORTTEMPFOLER="Abaqus_5_min_heatup/" # Location of heat up .odbs
+TEMPERATUREODB="800" #Temperature leave as 800
+TEMPERATUREODBITERATION='22' # Number of time steps in the heat up model. Leave as 22
+MODEL="800C_1s-1_setup.inp" # Model name
+PLASTICITYDATA="Patryk_mat_data.txt" # Possibly redundant code, ignore
+ODBREADER="read_Force_PEEQ_NT11_barrelling_forcemac.py" # Script to read Abaqus outputs
+SUBFOLDER="Abaqus/Friction_conductance/" # Where the script and .inp file is kept
+```
+
+Open `MCMC_800_1s-1.txt`
+
+Modify the following data:
+
+```
+OUTPUTFILE="MCMC_GPsurrgt_800C_1s-1_cond0-1500_20000_chain/" #Desired output file location
+MAINSCRIPT="MCMC_800C_1s-1.py" # MCMC script, leave
+MODELDATA="friction_conductance_power.pkl" # Name of the pickle file after running the previous script
+MODELDATAFOLDER="scratch/SFCP_800C_1s-1_importedodbs_cond0-1500/" # Where the above pickle file is kept
+SUBFOLDER="GP_surrogate_pymc/" # Where the MCMC script is kept
+TESTDATAFOLDER= "Patryk_Force_time_data/" # Where the physical data Force-time data is kept
+TESTDATA="800C_1s-1_csv.csv" # Physical data file
+```
