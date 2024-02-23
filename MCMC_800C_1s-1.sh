@@ -2,21 +2,22 @@
 
 # SGE options (whose lines must begin with #$)
 
-#$ -cwd               # Run the job in the current directory 
-#$ -l mem256 
-source activate PYMC_GPFlow
+#$ -cwd               # Run the job in the current directory
+#$ -l mem256
 
+source .venv/bin/activate
 
 #!/bin/sh
-OUTPUTFILE="MCMC_GPsurrgt_800C_1s-1_cond0-1500_20000_chain/"
-MAINSCRIPT="MCMC_800C_1s-1.py"
+SCRATCH=${HOME}/scratch
+OUTPUTDIR=${SCRATCH}/MCMC_GPsurrgt_800C_1s-1_cond0-1500_20000_chain
+MAINSCRIPT=${PWD}/MCMC_800C_1s-1.py
 MODELDATA="friction_conductance_power.pkl"
-MODELDATAFOLDER="scratch/SFCP_800C_1s-1_importedodbs_cond0-1500/"
-SUBFOLDER="GP_surrogate_pymc/"
-TESTDATAFOLDER= "Patryk_Force_time_data/"
+MODELDATADIR=${SCRATCH}/SFCP_800C_1s-1_importedodbs_cond0-1500
+TESTDATADIR=${PWD}
 TESTDATA="800C_1s-1_csv.csv"
-mkdir "/mnt/iusers01/jf01/w10944rb/scratch/${OUTPUTFILE}"
-cp "/mnt/iusers01/jf01/w10944rb/${MODELDATAFOLDER}${MODELDATA}" "/mnt/iusers01/jf01/w10944rb/scratch/${OUTPUTFILE}"
-cp "/mnt/iusers01/jf01/w10944rb/${TESTDATAFOLDER}${TESTDATA}" "/mnt/iusers01/jf01/w10944rb/scratch/${OUTPUTFILE}"
-cd $OUTPUTFILE
-python "/mnt/iusers01/jf01/w10944rb/${SUBFOLDER}${MAINSCRIPT}"  
+
+mkdir ${OUTPUTDIR}
+cp ${MODELDATADIR}/${MODELDATA} ${OUTPUTDIR}
+cp ${TESTDATADIR}/${TESTDATA} ${OUTPUTDIR}
+cd $OUTPUTDIR
+python ${MAINSCRIPT}
