@@ -1,0 +1,8 @@
+numpy
+scipy
+pandas
+matplotlib
+gpflow
+pymc
+tensorflow~=2.12.0
+tensorflow-probability~=0.20.0

@@ -18,5 +18,5 @@ with venv and pip rather than conda.
 - Install required packages
 
     ```
-    pip install numpy scipy pandas matplotlib gpflow pymc
+    pip install -r requirements.txt
     ```
