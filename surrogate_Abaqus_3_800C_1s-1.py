@@ -15,7 +15,6 @@ def call_abaqus_with_new_params(list_of_material_coefficients, original_inp_file
     #The list_of_material_coefficients is a numpy array of randomised multiples of material data, original_inp_file is a 
     #string locating the inp file, and output directory is where the .odb file is to be placed
     #print('abaqus function called')
-    output_filename='Doesitwork'
     input_file = generate_input_file(list_of_material_coefficients, original_inp_file)
     Run_Abaqus = subprocess.run(['abq2022','job=sub_script_check', 'input='+original_inp_file, 'interactive'])
     read_odb_into_text_file = subprocess.run(['abq2022','cae', 'noGUI=read_Force_PEEQ_NT11_barrelling_forcemac.py'])
