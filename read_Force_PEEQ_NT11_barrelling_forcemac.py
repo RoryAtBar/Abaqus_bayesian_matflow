@@ -210,8 +210,6 @@ def PEEQ_measure(output_filename,output_directory):
     session.writeXYReport(fileName='PEEQ_output.rpt', appendMode=OFF, 
         xyData=(x0, ))
 
-input_file = '~/scratch/Doesitwork.inp'
-#output_directory = '~/scratch/'
 output_directory = ''
 output_filename = 'sub_script_check.odb'
 
