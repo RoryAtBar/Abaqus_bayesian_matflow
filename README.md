@@ -27,7 +27,7 @@ statistical model instead of the Abaqus model.
 In the repository are the scripts, and input files that directly
 implement most of the above steps, and the workflow runs as following:
 
-1. A bash script can be found in `surrogate_Abaqus_3_800C_1s-1.txt`. Its
+1. A bash script can be found in `surrogate_Abaqus_3_800C_1s-1.sh`. Its
    function is to run Abaqus a number of times while varying interface
    friction and thermal conductance between the sample and the machine.
    To do this it gathers together:
@@ -48,11 +48,11 @@ implement most of the above steps, and the workflow runs as following:
      correct temperature distribution profile for the given thermal
      conductance value.
 
-2. Once `surrogate_Abaqus_3_800C_1s-1.txt` is run, it puts the model
+2. Once `surrogate_Abaqus_3_800C_1s-1.sh` is run, it puts the model
    information and scripts into a folder and runs `surrogate_Abaqus_3_800C_1s-1.py`
    
    `surrogate_Abaqus_3_800C_1s-1.py` contains functions for reading in the
-   text in 800C_1s-1_step_19.inp, changing the values of friction and
+   text in `800C_1s-1_step_19.inp`, changing the values of friction and
    thermal conductance, then writing them in to a new `.inp` file. Samples
    are chosen very simply by using nested for loops near the bottom of the
    script. The thermal conductance term changes both the gap conductance in
