@@ -1,0 +1,29 @@
+# create directories
+# generate input file
+# sub script check in abaqus
+# read odb into text file with abaqus - this python script also makes plots
+
+task_schemas:
+- objective: generate_input_file
+  inputs:
+  - parameter: list_of_material_coefficients
+  - parameter: original_inp_file
+  actions:
+  - script: <<script:/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/generate_input_file.py>>
+    script_data_in: direct
+    save_files:
+    - new_inp_file
+
+command_files:
+- label: new_inp_file
+  name:
+    name: friction_conductance.inp
+
+tasks:
+- schema: generate_input_file
+  inputs:
+  - list_of_material_coefficients: 
+    - 0.01  
+    - [0,"800nocondC_heatup22.odb"]
+    - 0
+  - original_inp_file: /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/friction_conductance.inp
