@@ -1,8 +1,3 @@
-# create directories
-# generate input file
-# sub script check in abaqus
-# read odb into text file with abaqus - this python script also makes plots
-
 template_components:
   task_schemas:
   - objective: generate_input_file
