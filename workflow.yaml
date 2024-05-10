@@ -7,7 +7,9 @@ template_components:
   task_schemas:
   - objective: generate_input_file
     inputs:
-    - parameter: material_coefficients
+    - parameter: friction
+    - parameter: conductance
+    - parameter: power
     - parameter: inp_file
     actions:
     - script: <<script:/home/mbexegc2/projects/lightform/rory_barker_matflow/Abaqus_bayesian_matflow/generate_input_file.py>>
@@ -28,8 +30,7 @@ template_components:
 tasks:
 - schema: generate_input_file
   inputs:
-    material_coefficients:
-    - 0.01
-    - [0,"800nocondC_heatup22.odb"]
-    - 0
+    friction: 0.01
+    conductance: [0,"800nocondC_heatup22.odb"]
+    power: 0
     inp_file: /home/mbexegc2/projects/lightform/rory_barker_matflow/Abaqus_bayesian_matflow/friction_conductance.inp

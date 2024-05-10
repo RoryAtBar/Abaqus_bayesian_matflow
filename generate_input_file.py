@@ -1,12 +1,12 @@
 import os
 
-def generate_input_file(material_coefficients: list, inp_file: str):
+def generate_input_file(friction: float, conductance: list, power: float, inp_file: str):
     """Update abaqus input file using list of material coefficients"""
     with open(inp_file, 'r') as f:
         inp_data = open(inp_file).read().split('\n')
-    inp_data = modify_friction(inp_data, material_coefficients[0])
-    inp_data = modify_platen_conductance(inp_data, material_coefficients[1])
-    inp_data = modify_power(inp_data, material_coefficients[2])
+    inp_data = modify_friction(inp_data, friction)
+    inp_data = modify_platen_conductance(inp_data, conductance)
+    inp_data = modify_power(inp_data, power)
     new_inp = ''
     for line in inp_data:
         new_inp += line + '\n'
