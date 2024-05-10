@@ -20,7 +20,7 @@ template_components:
       environments:
       - scope:
           type: any
-        environment: python_env
+        environment: rory_env
 
   command_files:
   - label: new_inp_file
