@@ -28,4 +28,4 @@ tasks:
     friction: 0.01
     conductance: [0,"800nocondC_heatup22.odb"]
     power: 0
-    inp_file: /home/mbexegc2/projects/lightform/rory_barker_matflow/Abaqus_bayesian_matflow/friction_conductance.inp
+    inp_file: /home/mbexegc2/projects/lightform/rory_barker_matflow/Abaqus_bayesian_matflow/800C_1s-1_setup.inp
