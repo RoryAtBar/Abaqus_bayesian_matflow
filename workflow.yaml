@@ -1,0 +1,31 @@
+template_components:
+  task_schemas:
+  - objective: generate_input_file
+    inputs:
+    - parameter: friction
+    - parameter: conductance
+    - parameter: power
+    - parameter: inp_file
+    actions:
+    - script: <<script:/home/mbexegc2/projects/lightform/rory_barker_matflow/Abaqus_bayesian_matflow/generate_input_file.py>>
+      script_exe: python_script
+      script_data_in: direct
+      save_files:
+      - new_inp_file
+      environments:
+      - scope:
+          type: any
+        environment: rory_env
+
+  command_files:
+  - label: new_inp_file
+    name:
+      name: friction_conductance.inp
+
+tasks:
+- schema: generate_input_file
+  inputs:
+    friction: 0.01
+    conductance: [0,"800nocondC_heatup22.odb"]
+    power: 0
+    inp_file: /home/mbexegc2/projects/lightform/rory_barker_matflow/Abaqus_bayesian_matflow/friction_conductance.inp
