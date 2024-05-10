@@ -3,32 +3,33 @@
 # sub script check in abaqus
 # read odb into text file with abaqus - this python script also makes plots
 
-task_schemas:
-- objective: generate_input_file
-  inputs:
-  - parameter: list_of_material_coefficients
-  - parameter: original_inp_file
-  actions:
-  - script: <<script:/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/generate_input_file.py>>
-    script_exe: python_script
-    script_data_in: direct
-    save_files:
-    - new_inp_file
-    environments:
-    - scope:
-        type: any
-      environment: python_env
+template_components:
+  task_schemas:
+  - objective: generate_input_file
+    inputs:
+    - parameter: material_coefficients
+    - parameter: inp_file
+    actions:
+    - script: <<script:/home/mbexegc2/projects/lightform/rory_barker_matflow/Abaqus_bayesian_matflow/generate_input_file.py>>
+      script_exe: python_script
+      script_data_in: direct
+      save_files:
+      - new_inp_file
+      environments:
+      - scope:
+          type: any
+        environment: python_env
 
-command_files:
-- label: new_inp_file
-  name:
-    name: friction_conductance.inp
+  command_files:
+  - label: new_inp_file
+    name:
+      name: friction_conductance.inp
 
 tasks:
 - schema: generate_input_file
   inputs:
-    list_of_material_coefficients: 
-    - 0.01  
+    material_coefficients:
+    - 0.01
     - [0,"800nocondC_heatup22.odb"]
     - 0
-    original_inp_file: /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/friction_conductance.inp
+    inp_file: /home/mbexegc2/projects/lightform/rory_barker_matflow/Abaqus_bayesian_matflow/friction_conductance.inp
