@@ -1,7 +1,7 @@
 import os
 
 def generate_input_file(friction: float, conductance: list, power: float, inp_file: str):
-    """Update abaqus input file using list of material coefficients"""
+    """Create abaqus input file using material coefficients to modify existing inp_file"""
     with open(inp_file, 'r') as f:
         inp_data = open(inp_file).read().split('\n')
     inp_data = modify_friction(inp_data, friction)
