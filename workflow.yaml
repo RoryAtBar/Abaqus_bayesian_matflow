@@ -1,21 +1,26 @@
 template_components:
   task_schemas:
-  - objective: generate_input_file
+  - objective: run_abaqus
     inputs:
     - parameter: friction
     - parameter: conductance
     - parameter: power
     - parameter: inp_file
     actions:
-    - script: <<script:/home/mbexegc2/projects/lightform/rory_barker_matflow/Abaqus_bayesian_matflow/generate_input_file.py>>
-      script_exe: python_script
-      script_data_in: direct
-      save_files:
-      - new_inp_file
-      environments:
-      - scope:
-          type: any
-        environment: rory_env
+      - environments:
+        - scope:
+            type: any
+          environment: abaqus_env
+        input_file_generators:
+        - input_file: new_inp_file
+          from_inputs:
+          - friction
+          - conductance
+          - power
+          - inp_file
+          script: <<script:/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/generate_input_file.py>>
+        commands:
+        - command: <<executable:abaqus>> job=sub_script_check input=<<file:new_inp_file>> interactive
 
   command_files:
   - label: new_inp_file
@@ -23,9 +28,9 @@ template_components:
       name: friction_conductance.inp
 
 tasks:
-- schema: generate_input_file
+- schema: run_abaqus
   inputs:
     friction: 0.01
-    conductance: [0,"800nocondC_heatup22.odb"]
+    conductance: [0,"/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/Abaqus_5_min_heatup/800nocondC_heatup22.odb"]
     power: 0
-    inp_file: /home/mbexegc2/projects/lightform/rory_barker_matflow/Abaqus_bayesian_matflow/800C_1s-1_setup.inp
+    inp_file: /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/800C_1s-1_setup.inp

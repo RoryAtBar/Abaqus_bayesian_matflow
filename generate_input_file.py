@@ -1,6 +1,6 @@
 import os
 
-def generate_input_file(friction: float, conductance: list, power: float, inp_file: str):
+def generate_input_file(path: str, friction: float, conductance: list, power: float, inp_file: str):
     """Create abaqus input file using material coefficients to modify existing inp_file"""
     with open(inp_file, 'r') as f:
         inp_data = open(inp_file).read().split('\n')
@@ -10,7 +10,7 @@ def generate_input_file(friction: float, conductance: list, power: float, inp_fi
     new_inp = ''
     for line in inp_data:
         new_inp += line + '\n'
-    with open("friction_conductance.inp",'w') as f:
+    with open(path,'w') as f:
         f.write(new_inp)
     f.close()
 
@@ -54,5 +54,5 @@ def modify_platen_conductance(inp_text, platen_conductance):
     curworkdir = os.getcwd()
     for n,line in enumerate(new_text):
         if line == "** Name: Predefined Field-2   Type: Temperature":
-            new_text[n+1] = f"*Initial Conditions, type=TEMPERATURE, file={curworkdir}/{platen_conductance[1]}, step=1, inc=0, interpolate"
+            new_text[n+1] = f"*Initial Conditions, type=TEMPERATURE, file={platen_conductance[1]}, step=1, inc=0, interpolate"
     return new_text
