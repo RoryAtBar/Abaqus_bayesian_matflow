@@ -1,1 +1,9 @@
 matflow-new
+numpy
+scipy
+pandas
+matplotlib
+gpflow<=2.5.2
+pymc
+tensorflow~=2.12.0
+tensorflow-probability~=0.20.0
