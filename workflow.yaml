@@ -1,4 +1,21 @@
 template_components:
+  environments:
+  - name: abaqus_env
+    setup: |
+      source /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/.venv/bin/activate
+      module load apps/binapps/abaqus/2022
+    executables:
+    - label: python_script
+      instances:
+      - command: python <<script_name>> <<args>>
+        num_cores: 1
+        parallel_mode: null
+    - label: abaqus
+      instances:
+      - command: abq2022
+        num_cores: 1
+        parallel_mode: null
+
   task_schemas:
   - objective: run_abaqus
     inputs:
