@@ -252,9 +252,9 @@ if not(result.success):
     with open("output.txt","a") as ou:
        ou.writelines(f"{current_time} GP RBF model failed, training Matern 5/2")
     ou.close()
-    model = gpflow.models.Matern52(
+    model = gpflow.models.GPR(
         (X_normed, Y[cond_filter,None]),
-        kernel=gpflow.kernels.RBF(np.shape(X_normed)[-1], lengthscales=np.ones(np.shape(X_normed)[-1])),)
+        kernel=gpflow.kernels.Materrn52(np.shape(X_normed)[-1], lengthscales=np.ones(np.shape(X_normed)[-1])),)
     opt = gpflow.optimizers.Scipy()
     result=opt.minimize(model.training_loss, model.trainable_variables)
     now = datetime.now()
@@ -271,9 +271,9 @@ if not(result.success):
     with open("output.txt","a") as ou:
        ou.writelines(f"{current_time} GP Matern 5/2 model failed, training Matern 3/2")
     ou.close()
-    model = gpflow.models.Matern32(
+    model = gpflow.models.GPR(
         (X_normed, Y[cond_filter,None]),
-        kernel=gpflow.kernels.RBF(np.shape(X_normed)[-1], lengthscales=np.ones(np.shape(X_normed)[-1])),)
+        kernel=gpflow.kernels.Matern32(np.shape(X_normed)[-1], lengthscales=np.ones(np.shape(X_normed)[-1])),)
     opt = gpflow.optimizers.Scipy()
     result=opt.minimize(model.training_loss, model.trainable_variables)
     now = datetime.now()
@@ -290,9 +290,9 @@ if not(result.success):
     with open("output.txt","a") as ou:
        ou.writelines(f"{current_time} GP Matern 3/2 model failed, training Matern 1/2")
     ou.close()
-    model = gpflow.models.Matern12(
+    model = gpflow.models.GPR(
         (X_normed, Y[cond_filter,None]),
-        kernel=gpflow.kernels.RBF(np.shape(X_normed)[-1], lengthscales=np.ones(np.shape(X_normed)[-1])),)
+        kernel=gpflow.kernels.Matern12(np.shape(X_normed)[-1], lengthscales=np.ones(np.shape(X_normed)[-1])),)
     opt = gpflow.optimizers.Scipy()
     result=opt.minimize(model.training_loss, model.trainable_variables)
     now = datetime.now()
