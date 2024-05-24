@@ -24,25 +24,51 @@ template_components:
     - parameter: power
     - parameter: inp_file
     actions:
-      - environments:
-        - scope:
-            type: any
-          environment: abaqus_env
-        input_file_generators:
-        - input_file: new_inp_file
-          from_inputs:
-          - friction
-          - conductance
-          - power
-          - inp_file
-          script: <<script:/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/generate_input_file.py>>
-        commands:
-        - command: <<executable:abaqus>> job=sub_script_check input=<<file:new_inp_file>> interactive
+    - environments:
+      - scope:
+          type: any
+        environment: abaqus_env
+      input_file_generators:
+      - input_file: new_inp_file
+        from_inputs:
+        - friction
+        - conductance
+        - power
+        - inp_file
+        script: <<script:/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/generate_input_file.py>>
+      commands:
+      - command: <<executable:abaqus>> job=sub_script_check input=<<file:new_inp_file>> interactive
+      - command: <<executable:abaqus>> cae noGUI=/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/read_Force_PEEQ_NT11_barrelling_forcemac.py
+      save_files:
+      - odb_file
+      - force_sample_set_1
+      - force_sample_set_2
+      - nt11
+      - outer_sample_xcoords
+      - peeq_output
 
   command_files:
   - label: new_inp_file
     name:
       name: friction_conductance.inp
+  - label: odb_file
+    name:
+      name: sub_script_check.odb
+  - label: force_sample_set_1
+    name:
+      name: Force_sample_set1.rpt
+  - label: force_sample_set_2
+    name:
+      name: Force_sample_set2.rpt
+  - label: nt11
+    name:
+      name: NT11.rpt
+  - label: outer_sample_xcoords
+    name:
+      name: outer_sample_xcoords.rpt
+  - label: peeq_output
+    name:
+      name: PEEQ_output.rpt
 
 tasks:
 - schema: run_abaqus
