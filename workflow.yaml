@@ -37,10 +37,12 @@ template_components:
         - conductance_file
         - power
         - inp_file
-        script: <<script:/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/generate_input_file.py>>
+        script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
+          Abaqus_bayesian_matflow/generate_input_file.py>>"
       commands:
       - command: <<executable:abaqus>> job=sub_script_check input=<<file:new_inp_file>> interactive
-      - command: <<executable:abaqus>> cae noGUI=/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/read_Force_PEEQ_NT11_barrelling_forcemac.py
+      - command: "<<executable:abaqus>> cae noGUI=/mnt/iusers01/support/mbexegc2/scratch/\
+          Abaqus_bayesian_matflow/read_Force_PEEQ_NT11_barrelling_forcemac.py"
       save_files:
       - odb_file
       - force_sample_set_1
@@ -77,6 +79,7 @@ tasks:
   inputs:
     friction: 0.01
     conductance_value: 0
-    conductance_file: /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/Abaqus_5_min_heatup/800nocondC_heatup22.odb
+    conductance_file: "/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow\
+      /Abaqus_5_min_heatup/800nocondC_heatup22.odb"
     power: 0
     inp_file: /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/800C_1s-1_setup.inp
