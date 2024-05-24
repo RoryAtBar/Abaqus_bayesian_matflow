@@ -1,11 +1,11 @@
 import os
 
-def generate_input_file(path: str, friction: float, conductance: list, power: float, inp_file: str):
+def generate_input_file(path: str, friction: float, conductance_value: int, conductance_file: str, power: float, inp_file: str):
     """Create abaqus input file using material coefficients to modify existing inp_file"""
     with open(inp_file, 'r') as f:
         inp_data = open(inp_file).read().split('\n')
     inp_data = modify_friction(inp_data, friction)
-    inp_data = modify_platen_conductance(inp_data, conductance)
+    inp_data = modify_platen_conductance(inp_data, conductance_value, conductance_file)
     inp_data = modify_power(inp_data, power)
     new_inp = ''
     for line in inp_data:
@@ -43,9 +43,10 @@ def modify_friction(inp_text, coefficient_of_friction):
             new_text[n+3] = replacement_line
     return new_text
 
-def modify_platen_conductance(inp_text, platen_conductance):
+
+def modify_platen_conductance(inp_text, conductance_value: int, conductance_file: str):
     new_text = inp_text
-    replacement_line = str(platen_conductance[0])+',    0.'
+    replacement_line = str(conductance_value)+',    0.'
     next_line = (len(replacement_line)- len('0., 0.001'))*' '
     for n,line in enumerate(inp_text):
         if line == '*Surface Interaction, name=SAMPLE_PLATEN_CONDUCTANCE':
@@ -54,5 +55,5 @@ def modify_platen_conductance(inp_text, platen_conductance):
     curworkdir = os.getcwd()
     for n,line in enumerate(new_text):
         if line == "** Name: Predefined Field-2   Type: Temperature":
-            new_text[n+1] = f"*Initial Conditions, type=TEMPERATURE, file={platen_conductance[1]}, step=1, inc=0, interpolate"
+            new_text[n+1] = f"*Initial Conditions, type=TEMPERATURE, file={conductance_file}, step=1, inc=0, interpolate"
     return new_text

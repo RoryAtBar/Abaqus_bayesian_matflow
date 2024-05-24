@@ -20,7 +20,8 @@ template_components:
   - objective: run_abaqus
     inputs:
     - parameter: friction
-    - parameter: conductance
+    - parameter: conductance_value
+    - parameter: conductance_file
     - parameter: power
     - parameter: inp_file
     actions:
@@ -32,7 +33,8 @@ template_components:
       - input_file: new_inp_file
         from_inputs:
         - friction
-        - conductance
+        - conductance_value
+        - conductance_file
         - power
         - inp_file
         script: <<script:/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/generate_input_file.py>>
@@ -74,6 +76,7 @@ tasks:
 - schema: run_abaqus
   inputs:
     friction: 0.01
-    conductance: [0,"/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/Abaqus_5_min_heatup/800nocondC_heatup22.odb"]
+    conductance_value: 0
+    conductance_file: /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/Abaqus_5_min_heatup/800nocondC_heatup22.odb
     power: 0
     inp_file: /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/800C_1s-1_setup.inp
