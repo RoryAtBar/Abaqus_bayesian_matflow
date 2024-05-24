@@ -24,25 +24,31 @@ template_components:
     - parameter: power
     - parameter: inp_file
     actions:
-      - environments:
-        - scope:
-            type: any
-          environment: abaqus_env
-        input_file_generators:
-        - input_file: new_inp_file
-          from_inputs:
-          - friction
-          - conductance
-          - power
-          - inp_file
-          script: <<script:/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/generate_input_file.py>>
-        commands:
-        - command: <<executable:abaqus>> job=sub_script_check input=<<file:new_inp_file>> interactive
+    - environments:
+      - scope:
+          type: any
+        environment: abaqus_env
+      input_file_generators:
+      - input_file: new_inp_file
+        from_inputs:
+        - friction
+        - conductance
+        - power
+        - inp_file
+        script: <<script:/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/generate_input_file.py>>
+      commands:
+      - command: <<executable:abaqus>> job=sub_script_check input=<<file:new_inp_file>> interactive
+      save_files:
+        - odb_file
+
 
   command_files:
   - label: new_inp_file
     name:
       name: friction_conductance.inp
+  - label: odb_file
+    name:
+      name: sub_script_check.odb
 
 tasks:
 - schema: run_abaqus
