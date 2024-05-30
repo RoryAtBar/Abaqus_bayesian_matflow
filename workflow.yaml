@@ -24,6 +24,8 @@ template_components:
     - parameter: conductance_file
     - parameter: power
     - parameter: inp_file
+    outputs:
+    - parameter: combine_outputs
     actions:
     - environments:
       - scope:
@@ -45,11 +47,20 @@ template_components:
           Abaqus_bayesian_matflow/read_Force_PEEQ_NT11_barrelling_forcemac.py"
       save_files:
       - odb_file
-      - force_sample_set_1
-      - force_sample_set_2
-      - nt11
-      - outer_sample_xcoords
-      - peeq_output
+      output_file_parsers:
+        combine_outputs:
+          from_files:
+          # These files have been removed from `save_files` due to a bug.
+          # They're automatically saved when they are listed as `from_files`.
+          - force_sample_set_1
+          - force_sample_set_2
+          - nt11
+          - outer_sample_xcoords
+          - peeq_output
+          script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
+           Abaqus_bayesian_matflow/gather_odb_outputs.py>>"
+          save_files:
+          - odb_results
 
   command_files:
   - label: new_inp_file
@@ -73,6 +84,9 @@ template_components:
   - label: peeq_output
     name:
       name: PEEQ_output.rpt
+  - label: odb_results
+    name:
+      name: odb_results.json
 
 tasks:
 - schema: run_abaqus
