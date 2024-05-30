@@ -50,7 +50,7 @@ template_components:
       output_file_parsers:
         combine_outputs:
           from_files:
-          # These files have been removed from `save_files` due to a bug.
+          # These files have been removed from `save_files` in the main action above due to a bug.
           # They're automatically saved when they are listed as `from_files`.
           - force_sample_set_1
           - force_sample_set_2
