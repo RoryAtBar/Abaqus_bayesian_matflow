@@ -24,6 +24,8 @@ template_components:
     - parameter: conductance_file
     - parameter: power
     - parameter: inp_file
+    outputs:
+    - parameter: combine_outputs
     actions:
     - environments:
       - scope:
@@ -37,17 +39,28 @@ template_components:
         - conductance_file
         - power
         - inp_file
-        script: <<script:/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/generate_input_file.py>>
+        script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
+          Abaqus_bayesian_matflow/generate_input_file.py>>"
       commands:
       - command: <<executable:abaqus>> job=sub_script_check input=<<file:new_inp_file>> interactive
-      - command: <<executable:abaqus>> cae noGUI=/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/read_Force_PEEQ_NT11_barrelling_forcemac.py
+      - command: "<<executable:abaqus>> cae noGUI=/mnt/iusers01/support/mbexegc2/scratch/\
+          Abaqus_bayesian_matflow/read_Force_PEEQ_NT11_barrelling_forcemac.py"
       save_files:
       - odb_file
-      - force_sample_set_1
-      - force_sample_set_2
-      - nt11
-      - outer_sample_xcoords
-      - peeq_output
+      output_file_parsers:
+        combine_outputs:
+          from_files:
+          # These files have been removed from `save_files` in the main action above due to a bug.
+          # They're automatically saved when they are listed as `from_files`.
+          - force_sample_set_1
+          - force_sample_set_2
+          - nt11
+          - outer_sample_xcoords
+          - peeq_output
+          script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
+           Abaqus_bayesian_matflow/gather_odb_outputs.py>>"
+          save_files:
+          - odb_results
 
   command_files:
   - label: new_inp_file
@@ -71,12 +84,16 @@ template_components:
   - label: peeq_output
     name:
       name: PEEQ_output.rpt
+  - label: odb_results
+    name:
+      name: odb_results.json
 
 tasks:
 - schema: run_abaqus
   inputs:
     friction: 0.01
     conductance_value: 0
-    conductance_file: /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/Abaqus_5_min_heatup/800nocondC_heatup22.odb
+    conductance_file: "/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow\
+      /Abaqus_5_min_heatup/800nocondC_heatup22.odb"
     power: 0
     inp_file: /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/800C_1s-1_setup.inp
