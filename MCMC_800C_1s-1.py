@@ -254,7 +254,7 @@ if not(result.success):
     ou.close()
     model = gpflow.models.GPR(
         (X_normed, Y[cond_filter,None]),
-        kernel=gpflow.kernels.Materrn52(np.shape(X_normed)[-1], lengthscales=np.ones(np.shape(X_normed)[-1])),)
+        kernel=gpflow.kernels.Matern52(np.shape(X_normed)[-1], lengthscales=np.ones(np.shape(X_normed)[-1])),)
     opt = gpflow.optimizers.Scipy()
     result=opt.minimize(model.training_loss, model.trainable_variables)
     now = datetime.now()
