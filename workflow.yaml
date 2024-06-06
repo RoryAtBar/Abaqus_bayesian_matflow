@@ -91,9 +91,39 @@ template_components:
 tasks:
 - schema: run_abaqus
   inputs:
-    friction: 0.01
-    conductance_value: 0
-    conductance_file: "/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow\
-      /Abaqus_5_min_heatup/800nocondC_heatup22.odb"
     power: 0
     inp_file: /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/800C_1s-1_setup.inp
+  sequences:
+  - path: inputs.conductance_value
+    values:
+    - 0
+    - 100
+    - 200
+    nesting_order: 0
+  - path: inputs.conductance_file
+    values:
+    - "/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow\
+       /Abaqus_5_min_heatup/800nocondC_heatup22.odb"
+    - "/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow\
+       /Abaqus_5_min_heatup/80010C_heatup22.odb"
+    - "/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow\
+       /Abaqus_5_min_heatup/80020C_heatup22.odb"
+    nesting_order: 0
+  - path: inputs.friction
+    values:
+    - 0.01
+    - 0.08
+    - 0.15
+    - 0.22
+    - 0.29
+    - 0.36
+    - 0.43
+    - 0.5
+    - 0.57
+    - 0.64
+    - 0.71
+    - 0.78
+    - 0.85
+    - 0.92
+    - 0.99
+    nesting_order: 1
