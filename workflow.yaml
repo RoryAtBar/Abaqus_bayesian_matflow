@@ -58,9 +58,25 @@ template_components:
           - outer_sample_xcoords
           - peeq_output
           script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
-           Abaqus_bayesian_matflow/gather_odb_outputs.py>>"
+            Abaqus_bayesian_matflow/gather_odb_outputs.py>>"
           save_files:
           - odb_results
+  - objective: summarise_results
+    inputs:
+    - parameter: combine_outputs
+      group: param_combo
+    outputs:
+    - parameter: summary_table
+    actions:
+    - environments:
+      - scope:
+          type: any
+        environment: abaqus_env
+      script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
+            Abaqus_bayesian_matflow/gather_results.py>>"
+      script_exe: python_script
+      save_files:
+      - summary_table
 
   command_files:
   - label: new_inp_file
@@ -87,9 +103,14 @@ template_components:
   - label: odb_results
     name:
       name: odb_results.json
+  - label: summary_table
+    name:
+      name: summary_table.json
 
 tasks:
 - schema: run_abaqus
+  groups:
+  - name: param_combo
   inputs:
     power: 0
     inp_file: /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/800C_1s-1_setup.inp
@@ -127,3 +148,4 @@ tasks:
 #    - 0.92
 #    - 0.99
     nesting_order: 1
+- schema: summarise_results
