@@ -25,7 +25,7 @@ template_components:
     - parameter: power
     - parameter: inp_file
     outputs:
-    - parameter: combine_outputs
+    - parameter: combined_odb_results
     actions:
     - environments:
       - scope:
@@ -48,7 +48,7 @@ template_components:
       save_files:
       - odb_file
       output_file_parsers:
-        combine_outputs:
+        combined_odb_results:
           from_files:
           # These files have been removed from `save_files` in the main action above due to a bug.
           # They're automatically saved when they are listed as `from_files`.
@@ -58,25 +58,25 @@ template_components:
           - outer_sample_xcoords
           - peeq_output
           script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
-            Abaqus_bayesian_matflow/gather_odb_outputs.py>>"
+            Abaqus_bayesian_matflow/combine_odb_results.py>>"
           save_files:
           - odb_results
-  - objective: summarise_results
+  - objective: gather_odb_results
     inputs:
-    - parameter: combine_outputs
-      group: param_combo
+    - parameter: combined_odb_results
+      group: property_combo
     outputs:
-    - parameter: summary_table
+    - parameter: odb_results_table
     actions:
     - environments:
       - scope:
           type: any
         environment: abaqus_env
       script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
-            Abaqus_bayesian_matflow/gather_results.py>>"
+            Abaqus_bayesian_matflow/gather_odb_results.py>>"
       script_exe: python_script
       save_files:
-      - summary_table
+      - odb_results_table
 
   command_files:
   - label: new_inp_file
@@ -103,14 +103,14 @@ template_components:
   - label: odb_results
     name:
       name: odb_results.json
-  - label: summary_table
+  - label: odb_results_table
     name:
-      name: summary_table.json
+      name: odb_results_table.json
 
 tasks:
 - schema: run_abaqus
   groups:
-  - name: param_combo
+  - name: property_combo
   inputs:
     power: 0
     inp_file: /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/800C_1s-1_setup.inp
@@ -148,4 +148,4 @@ tasks:
 #    - 0.92
 #    - 0.99
     nesting_order: 1
-- schema: summarise_results
+- schema: gather_odb_results
