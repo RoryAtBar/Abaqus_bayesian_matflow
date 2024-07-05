@@ -11,4 +11,4 @@ def gather_odb_results(combined_odb_results: list):
     with open("odb_results_table.json", "w") as f:
         json.dump(combined_odb_results, f, indent=2)
     summary_table = combined_odb_results 
-    return summary_table
+    return {"odb_results_table": summary_table}
