@@ -23,4 +23,4 @@ def combine_odb_results(force_sample_set_1: Path, force_sample_set_2: Path,
     with open("odb_results.json", "w") as f:
         json.dump(data, f, indent=2)
 
-    return {"combined_odb_results": data}
+    return data
