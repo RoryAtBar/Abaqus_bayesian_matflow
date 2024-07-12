@@ -25,7 +25,7 @@ template_components:
     - parameter: power
     - parameter: inp_file
     outputs:
-    - parameter: combine_outputs
+    - parameter: combined_odb_results
     actions:
     - environments:
       - scope:
@@ -48,7 +48,7 @@ template_components:
       save_files:
       - odb_file
       output_file_parsers:
-        combine_outputs:
+        combined_odb_results:
           from_files:
           # These files have been removed from `save_files` in the main action above due to a bug.
           # They're automatically saved when they are listed as `from_files`.
@@ -58,9 +58,27 @@ template_components:
           - outer_sample_xcoords
           - peeq_output
           script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
-           Abaqus_bayesian_matflow/gather_odb_outputs.py>>"
+            Abaqus_bayesian_matflow/combine_odb_results.py>>"
           save_files:
           - odb_results
+  - objective: gather_odb_results
+    inputs:
+    - parameter: combined_odb_results
+      group: property_combo
+    outputs:
+    - parameter: odb_results_table
+    actions:
+    - environments:
+      - scope:
+          type: any
+        environment: abaqus_env
+      script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
+            Abaqus_bayesian_matflow/gather_odb_results.py>>"
+      script_exe: python_script
+      script_data_in: direct
+      script_data_out: direct
+      save_files:
+      - odb_results_table
 
   command_files:
   - label: new_inp_file
@@ -87,13 +105,49 @@ template_components:
   - label: odb_results
     name:
       name: odb_results.json
+  - label: odb_results_table
+    name:
+      name: odb_results_table.json
 
 tasks:
 - schema: run_abaqus
+  groups:
+  - name: property_combo
   inputs:
-    friction: 0.01
-    conductance_value: 0
-    conductance_file: "/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow\
-      /Abaqus_5_min_heatup/800nocondC_heatup22.odb"
     power: 0
     inp_file: /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/800C_1s-1_setup.inp
+  sequences:
+  - path: inputs.conductance_value
+    values:
+    - 0
+    - 100
+    - 200
+    nesting_order: 0
+  - path: inputs.conductance_file
+    values:
+    - "/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow\
+       /Abaqus_5_min_heatup/800nocondC_heatup22.odb"
+    - "/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow\
+       /Abaqus_5_min_heatup/80010C_heatup22.odb"
+    - "/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow\
+       /Abaqus_5_min_heatup/80020C_heatup22.odb"
+    nesting_order: 0
+  - path: inputs.friction
+    values:
+    - 0.01
+    - 0.08
+    - 0.15
+#    - 0.22
+#    - 0.29
+#    - 0.36
+#    - 0.43
+#    - 0.5
+#    - 0.57
+#    - 0.64
+#    - 0.71
+#    - 0.78
+#    - 0.85
+#    - 0.92
+#    - 0.99
+    nesting_order: 1
+- schema: gather_odb_results
