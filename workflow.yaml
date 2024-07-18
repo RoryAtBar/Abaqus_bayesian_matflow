@@ -2,7 +2,7 @@ template_components:
   environments:
   - name: abaqus_env
     setup: |
-      source /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/.venv/bin/activate
+      source activate gpmatflow_Jul24
       module load apps/binapps/abaqus/2022
     executables:
     - label: python_script
@@ -39,11 +39,11 @@ template_components:
         - conductance_file
         - power
         - inp_file
-        script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
+        script: "<<script:/mnt/iusers01/jf01/w10944rb/scratch/\
           Abaqus_bayesian_matflow/generate_input_file.py>>"
       commands:
       - command: <<executable:abaqus>> job=sub_script_check input=<<file:new_inp_file>> interactive
-      - command: "<<executable:abaqus>> cae noGUI=/mnt/iusers01/support/mbexegc2/scratch/\
+      - command: "<<executable:abaqus>> cae noGUI=/mnt/iusers01/jf01/w10944rb/scratch/\
           Abaqus_bayesian_matflow/read_Force_PEEQ_NT11_barrelling_forcemac.py"
       save_files:
       - odb_file
@@ -57,7 +57,7 @@ template_components:
           - nt11
           - outer_sample_xcoords
           - peeq_output
-          script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
+          script: "<<script:/mnt/iusers01/jf01/w10944rb/scratch\
             Abaqus_bayesian_matflow/combine_odb_results.py>>"
           save_files:
           - odb_results
@@ -72,7 +72,7 @@ template_components:
       - scope:
           type: any
         environment: abaqus_env
-      script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
+      script: "<<script:/mnt/iusers01/jf01/w10944rb/scratch\
             Abaqus_bayesian_matflow/gather_odb_results.py>>"
       script_exe: python_script
       script_data_in: direct
@@ -125,11 +125,11 @@ tasks:
     nesting_order: 0
   - path: inputs.conductance_file
     values:
-    - "/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow\
+    - "/mnt/iusers01/jf01/w10944rb/scratch/Abaqus_bayesian_matflow\
        /Abaqus_5_min_heatup/800nocondC_heatup22.odb"
-    - "/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow\
+    - "/mnt/iusers01/jf01/w10944rb/scratchAbaqus_bayesian_matflow\
        /Abaqus_5_min_heatup/80010C_heatup22.odb"
-    - "/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow\
+    - "/mnt/iusers01/jf01/w10944rb/scratch/Abaqus_bayesian_matflow\
        /Abaqus_5_min_heatup/80020C_heatup22.odb"
     nesting_order: 0
   - path: inputs.friction
