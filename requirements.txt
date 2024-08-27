@@ -7,3 +7,4 @@ gpflow
 pymc
 tensorflow
 tensorflow-probability
+scikit-fda
