@@ -3,15 +3,15 @@
 # SGE options (whose lines must begin with #$)
 
 #$ -cwd               # Run the job in the current directory 
-source activate PYMC_GPFlow
+source ../test_venv/bin/activate
 
 
 
 #!/bin/sh
-OUTPUTFILE="MCMC_test"
-MAINSCRIPT="PData_set_up.py"
+OUTPUTDIR="MCMC_test"
+MAINSCRIPT="Data_set_up.py"
 DATA="friction_conductance_power.pkl"
-SUBFOLDER="~"
+SUBFOLDER=/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/parallel_core_pymc
 BASIS_FUNCS=2
 PLASTIC_START=4
 PLASTIC_END=-1
@@ -19,8 +19,8 @@ TRAIN_VALIDATE_RATIO="0.8"
 
 
 
-mkdir ~/scratch/"${OUTPUTFILE}"
+mkdir ~/scratch/"${OUTPUTDIR}"
 
-cp "${SUBFOLDER}${MAINSCRIPT}" ~/scratch/"${OUTPUTFILE}"
-cd ~/scratch/"${OUTPUTFILE}"
-python "${SUBFOLDER}${MAINSCRIPT}" "${BASIS_FUNCS}" "${PLASTIC_START}" "${PLASTIC_END}" "${TRAIN_VALIDATE_RATIO}"
+cp "${SUBFOLDER}/${MAINSCRIPT}" ~/scratch/"${OUTPUTDIR}"
+cd ~/scratch/"${OUTPUTDIR}"
+python "${SUBFOLDER}/${MAINSCRIPT}" "${BASIS_FUNCS}" "${PLASTIC_START}" "${PLASTIC_END}" "${TRAIN_VALIDATE_RATIO}"
