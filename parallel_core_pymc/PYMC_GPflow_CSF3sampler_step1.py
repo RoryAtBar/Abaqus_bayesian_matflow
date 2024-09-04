@@ -119,11 +119,11 @@ outp.close()
 
 model.compiled_predict_f = tf.function(
     lambda Xnew: model.predict_f(Xnew, full_cov=False),
-    input_signature=[tf.TensorSpec(shape=[1,6], dtype=tf.float64)],
+    input_signature=[tf.TensorSpec(shape=[1,np.shape(X_train)[-1]], dtype=tf.float64)],
 )
 model.compiled_predict_y = tf.function(
     lambda Xnew: model.predict_y(Xnew, full_cov=False),
-    input_signature=[tf.TensorSpec(shape=[1,6], dtype=tf.float64)],
+    input_signature=[tf.TensorSpec(shape=[1,np.shape(X_train)[-1]], dtype=tf.float64)],
 )
 
 tf.saved_model.save(model, model_name)
