@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
+"""  
 Created on Fri Jul 26 11:38:17 2024
 
 @author: w10944rb
@@ -343,8 +343,8 @@ sigma = cov_mat
 logl = LogLikeWithGrad(loglike_combined, test_curve, sigma,  model.posterior(),X,Y)
 chain_no = 1
 
-minimums = X.recover(np.zeros(6))
-maximums = X.recover(np.ones(6))
+minimums = X.recover(np.zeros(2))
+maximums = X.recover(np.ones(2))
 
 print("About to start MCMC")
 print("Maximums:", maximums)
@@ -352,15 +352,10 @@ print("Minimiums:", minimums)
 
 with pm.Model() as pymodel:
     # uniform priors on f and c
-    c0 = pm.Uniform("C0",lower=minimums[0], upper=maximums[0])
-    c1 = pm.Uniform("C1",lower=minimums[1], upper=maximums[1])
-    c2 = pm.Uniform("C2",lower=minimums[2], upper=maximums[2])
-    c3 = pm.Uniform("C3",lower=minimums[3], upper=maximums[3])
-    c4 = pm.Uniform("C4",lower=minimums[4], upper=maximums[4])
-    c5 = pm.Uniform("C5",lower=minimums[5], upper=maximums[5])
+    f = pm.Uniform("Friction",lower=minimums[0], upper=maximums[0])
+    c = pm.Uniform("Conductance",lower=minimums[1], upper=maximums[1])
     
-    
-    theta = pt.as_tensor_variable([c0,c1,c2,c3,c4,c5])
+    theta = pt.as_tensor_variable([f,c])
     pm.Potential("likelihood", logl(theta))
 
     #sigma = pm.Uniform("sigma", lower=0,upper=1)
