@@ -46,7 +46,9 @@ print("\n\n\n\n\n\n\n")
 
 
 
-
+#The Bayesian Inference is is uncertainty propagated backwards from either experiental or
+#sythetic data. The test curve represents the basis functions from skfda that represent the mean
+#basis function coefficients of the curve that will be used to calculate likelihood function values
 test_curve = []
 for i in Sythetic_mean_basis_coeffs.split(" "):
     test_curve.append(float(i))
@@ -57,11 +59,15 @@ print("test curve coeffs:", test_curve, "Array length:",len(test_curve))
 
 if Num_Basis_functions != len(test_curve):
     #The reason this is here rather than simply setting Synthetic_mean_basis_coeffs
-    #to the number of coefficient arguments is to help avoid user errors
+    #to the number of coefficient arguments is to help avoid user errors. If the basis coefficients are not
+    #read correctly and there are not the expected number of coefficients, the script ends here.
     print("Incorrect number of basis functions")
     print(f"Stated number of functions is {Num_Basis_functions}, but {len(test_curve)} provided")
     exit()
 
+
+#Variance values are needed to perform the Bayesian inference. This is based on experimental data.
+#This function extracts the raw stress-strain curves.
 def get_stress_strain(data,interval=50, offset=200):
     points=data[:,0]
     force=data[:,4]
@@ -86,6 +92,9 @@ def get_stress_strain(data,interval=50, offset=200):
     return stress,strain,load,displacement
 
 
+#The normaliser class was used to put all of the data into values between 0 and 1. The normalised data
+#Was used to train the GP surrogate model, so the normaliser is re-implemented here so that the data
+#stored in the previous nomaliser object may simply by saved in a pickle file in the previous step and recovered
 class Normaliser():
     def __init__(self, data=None):
         self.min = None
@@ -140,7 +149,9 @@ class Normaliser():
             return data * self.scale[i] + self.offset[i]
 
 
-#import the already created GP model
+#import the already created GP model saved as a pickle. It is important to run this script in the same 
+# environment as that used to create the saved model because this method of saving objects is very sensitive to
+#module versions.
 with open(GP_model_path,"rb") as mod:
     model = pickle.load(mod)
 mod.close()
@@ -159,12 +170,17 @@ print("Curves found:", variance_dat_list)
 variance_dat_dict = {csv_file: np.loadtxt(csv_file, delimiter=",",skiprows=3) for csv_file in variance_dat_list}
 keys = list(variance_dat_dict.keys())
 
+#Check data is as expected
 print("Dict of variance data keys:", variance_dat_dict.keys())
 print("Dict of variance data:", variance_dat_dict)
 print("Example data:", variance_dat_dict[keys[-1]])
 
 
-
+#The true_strain numpy array reflects the strain at each timestep in the Abaqus model. Some of the timesteps
+#have been cropped so that the Gaussian Process can be fit only to the plastic deformation behaviour.
+#This section finds the basis function coefficients that fit to the experimetnal data in the same plastic strain range
+#as the cropped Abaqus output data used to calculate the functional PCA that trained the GP.
+#The basis functions are found, and the covariance matrix calculated. The covariance matrix is used in the Bayesian inference.
 start = Plastic_start_step * 0.025
 true_strain = true_strain = np.linspace(0,0.475,20)
 stresses_for_fPCA = []
@@ -189,6 +205,11 @@ print("Covariance matrix: ", cov_mat)
 
 
 #set up the pymc model and functions
+
+#This class is from the PyMC website and is to wrap the samples for the MCMC since PyMC is designed to used tensor variables,
+#and the GP takes a numpy array as input and output.
+#Further classes are to calculate the gradient in posterior space using central difference.
+#This may allow for more efficient sampling during the MCMC step.
 class LogLikeWithGrad(pt.Op):
     itypes = [pt.dvector]  # expects a vector of parameter values when called
     otypes = [pt.dscalar]  # outputs a single scalar value (the log likelihood)
@@ -343,13 +364,18 @@ sigma = cov_mat
 logl = LogLikeWithGrad(loglike_combined, test_curve, sigma,  model.posterior(),X,Y)
 chain_no = 1
 
+
+#Uniform distributions are being used as priors as they restrict the MCMC samples to the range of parameters
+#Used to train the gaussian process surrogate model
 minimums = X.recover(np.zeros(2))
 maximums = X.recover(np.ones(2))
 
+#Check the maximum and minimum values are in line with the data
 print("About to start MCMC")
 print("Maximums:", maximums)
 print("Minimiums:", minimums)
 
+#PyMC context manager for the model
 with pm.Model() as pymodel:
     # uniform priors on f and c
     f = pm.Uniform("Friction",lower=minimums[0], upper=maximums[0])
@@ -369,4 +395,5 @@ with pm.Model() as pymodel:
 
     idata = pm.sample(tune=burn_in, draws=sample_size, step=step,cores=1, chains = chain_no)
 
+#Save the chain as a netcdf
 az.to_netcdf(idata,f"Idata_chain_{JobID}.nc")
