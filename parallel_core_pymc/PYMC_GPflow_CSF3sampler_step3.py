@@ -21,14 +21,15 @@ for i in trace_files:
     trace = az.from_netcdf(i)
     traces.append(trace)
 
+concat_traces = az.concat(traces, dim='chain')
 az.to_netcdf(traces, f"{data_filename}.nc")
 
-ax = az.plot_trace(traces)
+ax = az.plot_trace(concat_traces)
 fig = ax.ravel()[0].figure
 fig.savefig("Trace_plot.png")
-ax = az.plot_posterior(traces)
+ax = az.plot_posterior(concat_traces)
 fig = ax.ravel()[0].figure
 fig.savefig("Posterior.png")
 
-summary_table = az.summary(traces)
+summary_table = az.summary(concat_traces)
 print(summary_table)
