@@ -3,7 +3,6 @@
 # SGE options (whose lines must begin with #$)
 
 #$ -cwd               # Run the job in the current directory 
-#$ -l mem2000
 #$ -hold_jid PYMC_GPflow_CSF3sampler_step1.sh 
 #$ -t 1-25
 
