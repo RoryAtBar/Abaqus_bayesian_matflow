@@ -22,7 +22,7 @@ for i in trace_files:
     traces.append(trace)
 
 concat_traces = az.concat(traces, dim='chain')
-az.to_netcdf(traces, f"{data_filename}.nc")
+az.to_netcdf(concat_traces, f"{data_filename}.nc")
 
 ax = az.plot_trace(concat_traces)
 fig = ax.ravel()[0].figure
