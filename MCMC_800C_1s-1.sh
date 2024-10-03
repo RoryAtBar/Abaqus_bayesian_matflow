@@ -3,7 +3,7 @@
 # SGE options (whose lines must begin with #$)
 
 #$ -cwd               # Run the job in the current directory
-#$ -l mem256
+#$ -l mem512
 
 source .venv/bin/activate
 

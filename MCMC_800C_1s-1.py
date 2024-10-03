@@ -207,7 +207,7 @@ class Normaliser():
             assert isinstance(i, int)
             return data * self.scale[i] + self.offset[i]
         
-max_cond = 1500
+max_cond = 2000
 cond_filter = X[:,2] < max_cond
 
 X_normaliser = Normaliser(X[cond_filter,:])
@@ -221,7 +221,7 @@ ou.close()
 
 model = gpflow.models.GPR(
     (X_normed, Y[cond_filter,None]),
-    kernel=gpflow.kernels.Matern32(np.shape(X_normed)[-1], lengthscales=np.ones(np.shape(X_normed)[-1])),
+    kernel=gpflow.kernels.RBF(np.shape(X_normed)[-1], lengthscales=np.ones(np.shape(X_normed)[-1])),
 
 )
 
@@ -244,6 +244,66 @@ with open("output.txt","a") as ou:
    ou.writelines(f"Variance: {model.kernel.variance}")
    ou.writelines(f"Lengthscales: {str(model.kernel.lengthscales[:])}")
 ou.close()
+
+#Check if the GP qas successfully trained. If not, then try a different kernel
+if not(result.success):
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    with open("output.txt","a") as ou:
+       ou.writelines(f"{current_time} GP RBF model failed, training Matern 5/2")
+    ou.close()
+    model = gpflow.models.GPR(
+        (X_normed, Y[cond_filter,None]),
+        kernel=gpflow.kernels.Matern52(np.shape(X_normed)[-1], lengthscales=np.ones(np.shape(X_normed)[-1])),)
+    opt = gpflow.optimizers.Scipy()
+    result=opt.minimize(model.training_loss, model.trainable_variables)
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    with open("output.txt","a") as ou:
+       ou.writelines(f"{current_time} GP model training complete")
+       ou.writelines(f"Variance: {model.kernel.variance}")
+       ou.writelines(f"Lengthscales: {str(model.kernel.lengthscales[:])}")
+    ou.close()
+
+if not(result.success):
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    with open("output.txt","a") as ou:
+       ou.writelines(f"{current_time} GP Matern 5/2 model failed, training Matern 3/2")
+    ou.close()
+    model = gpflow.models.GPR(
+        (X_normed, Y[cond_filter,None]),
+        kernel=gpflow.kernels.Matern32(np.shape(X_normed)[-1], lengthscales=np.ones(np.shape(X_normed)[-1])),)
+    opt = gpflow.optimizers.Scipy()
+    result=opt.minimize(model.training_loss, model.trainable_variables)
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    with open("output.txt","a") as ou:
+       ou.writelines(f"{current_time} GP model training complete")
+       ou.writelines(f"Variance: {model.kernel.variance}")
+       ou.writelines(f"Lengthscales: {str(model.kernel.lengthscales[:])}")
+    ou.close()
+    
+if not(result.success):
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    with open("output.txt","a") as ou:
+       ou.writelines(f"{current_time} GP Matern 3/2 model failed, training Matern 1/2")
+    ou.close()
+    model = gpflow.models.GPR(
+        (X_normed, Y[cond_filter,None]),
+        kernel=gpflow.kernels.Matern12(np.shape(X_normed)[-1], lengthscales=np.ones(np.shape(X_normed)[-1])),)
+    opt = gpflow.optimizers.Scipy()
+    result=opt.minimize(model.training_loss, model.trainable_variables)
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    with open("output.txt","a") as ou:
+       ou.writelines(f"{current_time} GP model training complete")
+       ou.writelines(f"Variance: {model.kernel.variance}")
+       ou.writelines(f"Lengthscales: {str(model.kernel.lengthscales[:])}")
+    ou.close()
+
+
 
 def data_vs_gaussian3inp(X,Y, curve_no, axes,m):
     loc1 = curve_no*19
