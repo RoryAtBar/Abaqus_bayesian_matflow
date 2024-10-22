@@ -61,6 +61,10 @@ template_components:
             Abaqus_bayesian_matflow/combine_odb_results.py>>"
           save_files:
           - odb_results
+          inputs:
+            - friction
+            - conductance_value
+            - power
   - objective: gather_odb_results
     inputs:
     - parameter: combined_odb_results

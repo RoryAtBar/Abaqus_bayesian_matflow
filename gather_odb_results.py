@@ -3,18 +3,27 @@ from pathlib import Path
 
 def gather_odb_results(combined_odb_results: list):
     """Gather results from each combination of parameters from a sequence"""
+    power = []
+    friction = []
+    conductance = []
     force_vals1 = []
     force_vals2 = []
     barrelling_profile = []
     peeq_vals = []
     nt11 = []
     for result in combined_odb_results:
+      power.append(result["power"])
+      friction.append(result["friction"])
+      conductance.append(result["conductance"])
       force_vals1.append(result["force_vals1"])
       force_vals2.append(result["force_vals2"])
       barrelling_profile.append(result["barrelling_profile"])
       peeq_vals.append(result["peeq_vals"])
       nt11.append(result["nt11"])
-    gathered_odb_results = {"force_vals1": force_vals1,
+    gathered_odb_results = {"power": power,
+                            "friction": friction,
+                            "conductance": conductance,
+                            "force_vals1": force_vals1,
                             "force_vals2": force_vals2,
                             "barrelling_profile": barrelling_profile,
                             "peeq_vals": peeq_vals,
