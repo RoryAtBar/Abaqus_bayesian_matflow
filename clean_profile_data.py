@@ -17,7 +17,7 @@ def clean_profile_data(
     barelling_profile = clean_data(odb_results_table["barrelling_profile"], 3, -5)
     force_profile1 = clean_data(odb_results_table["force_vals1"], 3, -5)
     force_profile2 = clean_data(odb_results_table["force_vals2"], 3, -5)
-    force_profile = [fp1 + fp2 for fp1, fp2 in zip(force_profile1, force_profile2)]
+    force_profile = [fp1[:, 1] + fp2[:, 1] for fp1, fp2 in zip(force_profile1, force_profile2)]
 
     # Convert force-displacement into stress and strain values
     true_strain = np.linspace(0, 0.475, 20)
@@ -44,7 +44,9 @@ def clean_profile_data(
     basis = skfda.representation.basis.MonomialBasis(n_basis=n_basis)
 
     # filter out failed simulations
-    valid_sims = np.array(odb_results_table[["Friction", "Conductance"]][truth_list])
+    valid_friction = [i for (i, v) in zip(odb_results_table['friction'], truth_list) if v]
+    valid_conductance = [i for (i, v) in zip(odb_results_table['conductance'], truth_list) if v]
+    valid_sims = np.array((valid_friction, np.array(valid_conductance))).T
 
     # Normalise the data, then conduct fPCA on the normalised data
     x = Normaliser(valid_sims)
