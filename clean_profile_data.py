@@ -90,6 +90,8 @@ def clean_profile_data(
         "y_train": y_train,
         "x_validate": x_validate,
         "y_validate": y_validate,
+        "x": x,
+        "y": y,
     }
     return model_data
 

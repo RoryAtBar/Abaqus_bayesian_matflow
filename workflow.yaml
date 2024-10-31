@@ -95,6 +95,8 @@ template_components:
     - parameter: y_train
     - parameter: x_validate
     - parameter: y_validate
+    - parameter: x
+    - parameter: y
     actions: 
     - environments:
       - scope:
