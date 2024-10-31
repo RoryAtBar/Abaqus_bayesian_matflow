@@ -91,7 +91,10 @@ template_components:
     - parameter: plastic_end_step
     - parameter: train_to_validate
     outputs:
-    - parameter: model_data
+    - parameter: x_train
+    - parameter: y_train
+    - parameter: x_validate
+    - parameter: y_validate
     actions: 
     - environments:
       - scope:
