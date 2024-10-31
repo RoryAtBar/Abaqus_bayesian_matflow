@@ -136,6 +136,12 @@ template_components:
     name:
       name: odb_results_table.json
 
+resources:
+  any:
+    scheduler_args:
+      options:
+        -l: short
+
 tasks:
 - schema: run_abaqus
   groups:
