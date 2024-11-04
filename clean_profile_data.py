@@ -15,8 +15,8 @@ def clean_profile_data(
     temp_profile = clean_data(odb_results_table["nt11"], 4, 44)
     peeq_profile = clean_data(odb_results_table["peeq_vals"], 3, -5)
     barelling_profile = clean_data(odb_results_table["barrelling_profile"], 3, -5)
-    force_profile1 = clean_data(odb_results_table["force_vals1"], 3, -5)
-    force_profile2 = clean_data(odb_results_table["force_vals2"], 3, -5)
+    force_profile1 = clean_data(odb_results_table["force_vals1"], 3, -5, null_value=[0])
+    force_profile2 = clean_data(odb_results_table["force_vals2"], 3, -5, null_value=[0])
     force_profile = [fp1[:, 1] + fp2[:, 1] for fp1, fp2 in zip(force_profile1, force_profile2)]
 
     # Convert force-displacement into stress and strain values
@@ -97,10 +97,12 @@ def clean_profile_data(
     return model_data
 
 
-def clean_data(raw_data: list[str], first_index: int, last_index: int):
+def clean_data(raw_data: list[str], first_index: int, last_index: int, null_value=None):
     """Remove junk data points and convert json string data into numpy array"""
     # There are some lines of junk/empty data, which varies depending on the data variables
     # The lines of interest are specified by first_index and last_index
+    if null_value is None:
+        null_value = []
     clean_data = []
     if last_index < 0:
         last_index = len(raw_data[0]) + last_index
@@ -115,7 +117,7 @@ def clean_data(raw_data: list[str], first_index: int, last_index: int):
                 prof[k, 1] = float(nums[1])
             clean_data.append(prof)
         else:
-            clean_data.append([])
+            clean_data.append(null_value)
     return clean_data
 
 
