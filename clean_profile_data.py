@@ -12,9 +12,6 @@ def clean_profile_data(
     plastic_end_step: int,
     train_to_validate: float,
 ):
-    temp_profile = clean_data(odb_results_table["nt11"], 4, 44)
-    peeq_profile = clean_data(odb_results_table["peeq_vals"], 3, -5)
-    barelling_profile = clean_data(odb_results_table["barrelling_profile"], 3, -5)
     force_profile1 = clean_data(odb_results_table["force_vals1"], 3, -5, null_value=[0])
     force_profile2 = clean_data(odb_results_table["force_vals2"], 3, -5, null_value=[0])
     force_profile = [fp1[:, 1] + fp2[:, 1] for fp1, fp2 in zip(force_profile1, force_profile2)]
