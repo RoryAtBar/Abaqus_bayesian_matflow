@@ -75,20 +75,15 @@ def clean_profile_data(
     y_train = y_randomised[:cut_off, :]
     y_validate = y_randomised[cut_off:, :]
 
-    pd.DataFrame(x_train).to_pickle("x_train.pkl")
-    pd.DataFrame(y_train).to_pickle("y_train.pkl")
-    pd.DataFrame(x_validate).to_pickle("x_validate.pkl")
-    pd.DataFrame(y_validate).to_pickle("y_validate.pkl")
-
     model_data = {
         "x_train": x_train,
         "y_train": y_train,
         "x_validate": x_validate,
         "y_validate": y_validate,
     }
+
     # Save x and y as pickle files and load in next task.
     # MatFlow can't handle passing this data format as an output parameter.
-
     with open("x.pkl", "wb") as outp:
         pickle.dump(x, outp, pickle.HIGHEST_PROTOCOL)
     with open("y.pkl", "wb") as outp:
