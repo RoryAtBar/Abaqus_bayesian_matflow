@@ -61,6 +61,10 @@ template_components:
             Abaqus_bayesian_matflow/combine_odb_results.py>>"
           save_files:
           - odb_results
+          inputs:
+            - friction
+            - conductance_value
+            - power
   - objective: gather_odb_results
     inputs:
     - parameter: combined_odb_results
@@ -79,6 +83,29 @@ template_components:
       script_data_out: direct
       save_files:
       - odb_results_table
+  - objective: create_model_data
+    inputs:
+    - parameter: odb_results_table
+    - parameter: n_basis
+    - parameter: plastic_start_step
+    - parameter: plastic_end_step
+    - parameter: train_to_validate
+    outputs:
+    - parameter: x_train
+    - parameter: y_train
+    - parameter: x_validate
+    - parameter: y_validate
+    actions: 
+    - environments:
+      - scope:
+          type: any
+        environment: abaqus_env
+      script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
+               Abaqus_bayesian_matflow/clean_profile_data.py>>"
+      script_exe: python_script
+      script_data_in: direct
+      script_data_out: direct
+    
 
   command_files:
   - label: new_inp_file
@@ -108,6 +135,12 @@ template_components:
   - label: odb_results_table
     name:
       name: odb_results_table.json
+
+resources:
+  any:
+    scheduler_args:
+      options:
+        -l: short
 
 tasks:
 - schema: run_abaqus
@@ -151,3 +184,9 @@ tasks:
 #    - 0.99
     nesting_order: 1
 - schema: gather_odb_results
+- schema: create_model_data
+  inputs:
+   n_basis: 2
+   plastic_start_step: 4
+   plastic_end_step: -1
+   train_to_validate: 0.8 
