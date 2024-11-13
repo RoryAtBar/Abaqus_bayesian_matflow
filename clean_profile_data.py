@@ -1,6 +1,4 @@
-import json
 import numpy as np
-import pandas as pd
 import skfda
 import pickle
 
@@ -44,8 +42,8 @@ def clean_profile_data(
     basis = skfda.representation.basis.MonomialBasis(n_basis=n_basis)
 
     # filter out failed simulations
-    valid_friction = [i for (i, v) in zip(odb_results_table['friction'], truth_list) if v]
-    valid_conductance = [i for (i, v) in zip(odb_results_table['conductance'], truth_list) if v]
+    valid_friction = [i for (i, v) in zip(odb_results_table["friction"], truth_list) if v]
+    valid_conductance = [i for (i, v) in zip(odb_results_table["conductance"], truth_list) if v]
     valid_sims = np.array((valid_friction, np.array(valid_conductance))).T
 
     # Normalise the data, then conduct fPCA on the normalised data

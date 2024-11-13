@@ -105,8 +105,27 @@ template_components:
       script_exe: python_script
       script_data_in: direct
       script_data_out: direct
-    
-
+      save_files:
+      - x_pickle
+      - y_pickle
+  - objective: run_model
+    inputs:
+    - parameter: x_train
+    - parameter: y_train
+    - parameter: x_validate
+    - parameter: y_validate
+    - parameter: n_basis
+    - parameter: kernel
+    - parameter: model_name
+    actions:
+    - environments:
+      - scope:
+          type: any
+        environment: abaqus_env
+      script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
+               Abaqus_bayesian_matflow/run_model.py>>"
+      script_exe: python_script
+      script_data_in: direct
   command_files:
   - label: new_inp_file
     name:
@@ -135,6 +154,12 @@ template_components:
   - label: odb_results_table
     name:
       name: odb_results_table.json
+  - label: x_pickle
+    name:
+      name: x.pkl
+  - label: y_pickle
+    name:
+      name: y.pkl
 
 resources:
   any:
@@ -189,4 +214,9 @@ tasks:
    n_basis: 2
    plastic_start_step: 4
    plastic_end_step: -1
-   train_to_validate: 0.8 
+   train_to_validate: 0.8
+- schema: run_model
+  inputs:
+    n_basis: 2
+    kernel: Auto
+    model_name: Quadplast_timesteps_5-15
