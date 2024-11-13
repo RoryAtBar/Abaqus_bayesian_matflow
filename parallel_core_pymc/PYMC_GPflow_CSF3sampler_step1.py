@@ -76,7 +76,7 @@ elif kern == "Matern32":
 elif kern == "Matern12":
     model = gpflow.models.GPR(
         (X_train, Y_train),
-        kernel=gpflow.kernels.Matern32(
+        kernel=gpflow.kernels.Matern12(
             np.shape(X_train)[-1], lengthscales=np.ones(np.shape(X_train)[-1])
         )
         + gpflow.kernels.Linear(np.shape(X_train)[-1]),
