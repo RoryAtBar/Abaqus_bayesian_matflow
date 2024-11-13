@@ -122,11 +122,10 @@ template_components:
       - scope:
           type: any
         environment: abaqus_env
-      script: "script:/mnt/iusers01/support/mbexegc2/scratch/\
+      script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
                Abaqus_bayesian_matflow/run_model.py>>"
-      save_files:
-      - model_pickle
-
+      script_exe: python_script
+      script_data_in: direct
   command_files:
   - label: new_inp_file
     name:
