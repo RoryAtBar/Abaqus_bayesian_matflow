@@ -218,5 +218,5 @@ tasks:
 - schema: run_model
   inputs:
     n_basis: 2
-    kernel: "Auto"
-    model_name: "Quadplast_timesteps_5-15"
+    kernel: Auto
+    model_name: Quadplast_timesteps_5-15
