@@ -105,7 +105,9 @@ template_components:
       script_exe: python_script
       script_data_in: direct
       script_data_out: direct
-    
+      save_files:
+      - x_pickle
+      - y_pickle
 
   command_files:
   - label: new_inp_file
@@ -135,6 +137,12 @@ template_components:
   - label: odb_results_table
     name:
       name: odb_results_table.json
+  - label: x_pickle
+    name:
+      name: x.pkl
+  - label: y_pickle
+    name:
+      name: y.pkl
 
 resources:
   any:
