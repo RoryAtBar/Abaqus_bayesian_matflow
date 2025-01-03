@@ -126,6 +126,8 @@ template_components:
                Abaqus_bayesian_matflow/run_model.py>>"
       script_exe: python_script
       script_data_in: direct
+      save_files:
+      - model_vs_abaqus_plots
   command_files:
   - label: new_inp_file
     name:
@@ -160,6 +162,10 @@ template_components:
   - label: y_pickle
     name:
       name: y.pkl
+  - label: model_vs_abaqus_plots
+    name:
+      name: (Basis_func_\d+\.png)
+      is_regex: true
 
 resources:
   any:
