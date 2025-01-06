@@ -126,6 +126,29 @@ template_components:
                Abaqus_bayesian_matflow/run_model.py>>"
       script_exe: python_script
       script_data_in: direct
+  - objective: sample_model
+    inputs:
+    - parameter: x_pickle # command file - looks like I have to hack it by providing a relative path?
+    - parameter: y_pickle # command file
+    - parameter: n_basis
+    - parameter: plastic_start_step
+    - parameter: plastic_end_step
+    - parameter: burn_in
+    - parameter: sample_size
+    - parameter: sythetic_mean_basis_coeffs
+    - parameter: model_name
+    - parameter: variance_dir
+    actions:
+    - environments:
+      - scope:
+          type: any
+        environment: abaqus_env
+      script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/\
+               sample_model.py>>"
+      script_exe: python_script
+      script_data_in: direct
+
+
   command_files:
   - label: new_inp_file
     name:
@@ -220,3 +243,15 @@ tasks:
     n_basis: 2
     kernel: Auto
     model_name: Quadplast_timesteps_5-15
+- schema: sample_model
+  inputs:
+    x_pickle: ../../../../artifacts/tasks/task_2_create_model_data/e_0/r_0/x.pkl
+    y_pickle: ../../../../artifacts/tasks/task_2_create_model_data/e_0/r_0/y.pkl
+    plastic_start_step: 4
+#    n_basis: 2 # Does this need to be specified, or will it be "read" from previous tasks inputs?
+    plastic_end_step: 15
+    burn_in: 100000
+    sample_size: 200000
+    sythetic_mean_basis_coeffs: [46973769.8, 322884.150]
+    model_name: Quadplast_timesteps_5-15
+    variance_dir: Ti64_Flowcurves
