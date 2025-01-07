@@ -17,8 +17,8 @@ def sample_model(
     burn_in: int,
     sample_size: int,
     sythetic_mean_basis_coeffs: list,
-    model_name: str,
     variance_dir: str,
+    dependency_hack: str,
 ):
 
     # The Bayesian Inference is uncertainty propagated backwards from either experiental or
@@ -40,7 +40,7 @@ def sample_model(
     # environment as that used to create the saved model because this method of saving objects is very sensitive to
     # module versions.
     gp_model_path = (
-        Path.cwd().parents[3] / "artifacts/tasks/task_4_sample_model" / (model_name + ".pkl")
+        Path.cwd().parents[3] / "artifacts/tasks/task_3_run_model/e_0/r_0/gp_model.pkl"
     )
     with open(gp_model_path, "rb") as mod:
         model = pickle.load(mod)

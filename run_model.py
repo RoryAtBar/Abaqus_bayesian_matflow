@@ -12,7 +12,6 @@ def run_model(
     y_validate: np.ndarray,
     n_basis: int,
     kernel: str,
-    model_name: str,
 ):
 
     if n_basis != np.shape(y_train)[-1]:
@@ -62,7 +61,7 @@ def run_model(
     inps = np.random.rand(1000, np.shape(x_train)[-1])
     samps = model.posterior().predict_f(inps)
 
-    with open(f"{model_name}.pkl", "wb") as outp:
+    with open("gp_model.pkl", "wb") as outp:
         pickle.dump(model, outp, pickle.HIGHEST_PROTOCOL)
     outp.close()
 
@@ -75,7 +74,7 @@ def run_model(
         input_signature=[tf.TensorSpec(shape=[1, np.shape(x_train)[-1]], dtype=tf.float64)],
     )
 
-    tf.saved_model.save(model, model_name)
+    tf.saved_model.save(model, "gp_model")
 
     outs = model.posterior().predict_f(x_validate)
 
@@ -88,3 +87,5 @@ def run_model(
         plt.plot(np.array([0, 1]), np.array([0, 1]), "k")
         plt.legend()
         plt.savefig(f"Basis_func_{i}.png")
+
+    return {"dependency_hack": "variable used to force dependency between tasks"}
