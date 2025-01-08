@@ -304,3 +304,61 @@ def loglike_combined(theta, data, sigma, gp_model, X_norm_obj, Y_norm_obj):
     diff = np.array((data - p_model))
     # print("diff: ",diff)
     return (-0.5) * (np.matmul(np.matmul(diff[:princo], inv_cov), diff[:princo, None]))[0]
+
+
+# The normaliser class was used to put all of the data into values between 0 and 1. The normalised data
+# Was used to train the GP surrogate model, so the normaliser is re-implemented here so that the data
+# stored in the previous nomaliser object may simply be saved in a pickle file in the previous step and recovered
+class Normaliser():
+    def __init__(self, data=None):
+        self.min = None
+        self.max = None
+        if data is not None:
+            self.add_data(data)
+
+    @property
+    def ready(self):
+        return self.min is not None and self.max is not None
+
+    @property
+    def scale(self):
+        self.check_ready()
+        return np.abs(self.max - self.min)
+
+    @property
+    def offset(self):
+        self.check_ready()
+        return self.min
+
+    def check_ready(self):
+        if not self.ready:
+            raise ValueError('No data set')
+
+    def add_data(self, data):
+        new_min = data.min(axis=0)
+        new_max = data.max(axis=0)
+        if self.ready:
+            mask = new_min < self.min
+            self.min[mask] = new_min[mask]
+
+            mask = new_max > self.max
+            self.max[mask] = new_max[mask]
+        else:
+            self.min = new_min
+            self.max = new_max
+
+    def normalise(self, data, i=None):
+        self.check_ready()
+        if i is None:
+            return (data - self.offset) / self.scale
+        else:
+            assert isinstance(i, int)
+        
+    def recover(self, data, i=None):
+        self.check_ready()
+        if i is None:
+            return data * self.scale + self.offset
+        else:
+            assert isinstance(i, int)
+            return data * self.scale[i] + self.offset[i]
+
