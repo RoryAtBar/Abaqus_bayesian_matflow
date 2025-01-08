@@ -250,6 +250,10 @@ tasks:
     n_basis: 2
     kernel: Auto
 - schema: sample_model
+  resources:
+    any:
+      scheduler_args:
+        options: {}
   inputs:
     x_pickle: ../../../../artifacts/tasks/task_2_create_model_data/e_0/r_0/x.pkl
     y_pickle: ../../../../artifacts/tasks/task_2_create_model_data/e_0/r_0/y.pkl
