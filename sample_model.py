@@ -19,13 +19,15 @@ def sample_model(
     sythetic_mean_basis_coeffs: list,
     variance_dir: str,
     dependency_hack: str,
+    iteration: int,
 ):
 
     # The Bayesian Inference is uncertainty propagated backwards from either experiental or
     # sythetic data. The test curve represents the basis functions from skfda that represent the mean
     # basis function coefficients of the curve that will be used to calculate likelihood function values
     test_curve = np.array(sythetic_mean_basis_coeffs)
-    print(dependency_hack) # Just to keep the linters happy that the variable is used.
+    print(f"dependency_hack: {dependency_hack}")  # Keep linters quiet about unused variables
+    print(f"iteration: {iteration}")
     print("test curve coeffs:", test_curve, "Array length:", len(test_curve))
 
     if n_basis != len(test_curve):

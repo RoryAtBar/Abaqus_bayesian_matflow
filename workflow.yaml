@@ -141,6 +141,7 @@ template_components:
     - parameter: sythetic_mean_basis_coeffs
     - parameter: variance_dir
     - parameter: dependency_hack
+    - parameter: iteration
     actions:
     - environments:
       - scope:
@@ -258,3 +259,6 @@ tasks:
     sample_size: 200000
     sythetic_mean_basis_coeffs: [46973769.8, 322884.150]
     variance_dir: /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/parallel_core_pymc/Ti64_Flowcurves
+  sequences:
+  - path: inputs.iteration
+    values: [0, 1, 2]
