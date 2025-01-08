@@ -41,9 +41,7 @@ def sample_model(
     # import the already created GP model saved as a pickle. It is important to run this script in the same
     # environment as that used to create the saved model because this method of saving objects is very sensitive to
     # module versions.
-    gp_model_path = (
-        Path.cwd().parents[3] / "artifacts/tasks/task_3_run_model/e_0/r_0/gp_model.pkl"
-    )
+    gp_model_path = Path.cwd().parents[3] / "artifacts/tasks/task_3_run_model/e_0/r_0/gp_model.pkl"
     with open(gp_model_path, "rb") as mod:
         model = pickle.load(mod)
 
@@ -311,7 +309,7 @@ def loglike_combined(theta, data, sigma, gp_model, X_norm_obj, Y_norm_obj):
 # The normaliser class was used to put all of the data into values between 0 and 1. The normalised data
 # Was used to train the GP surrogate model, so the normaliser is re-implemented here so that the data
 # stored in the previous nomaliser object may simply be saved in a pickle file in the previous step and recovered
-class Normaliser():
+class Normaliser:
     def __init__(self, data=None):
         self.min = None
         self.max = None
@@ -334,7 +332,7 @@ class Normaliser():
 
     def check_ready(self):
         if not self.ready:
-            raise ValueError('No data set')
+            raise ValueError("No data set")
 
     def add_data(self, data):
         new_min = data.min(axis=0)
@@ -355,7 +353,7 @@ class Normaliser():
             return (data - self.offset) / self.scale
         else:
             assert isinstance(i, int)
-        
+
     def recover(self, data, i=None):
         self.check_ready()
         if i is None:
@@ -363,4 +361,3 @@ class Normaliser():
         else:
             assert isinstance(i, int)
             return data * self.scale[i] + self.offset[i]
-
