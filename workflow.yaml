@@ -142,6 +142,8 @@ template_components:
     - parameter: variance_dir
     - parameter: dependency_hack
     - parameter: iteration
+    outputs:
+    - parameter: dependency_hack_iteration
     actions:
     - environments:
       - scope:
@@ -153,6 +155,22 @@ template_components:
       script_data_in: direct
       save_files:
       - idata_chain
+  - objective: summarise
+    inputs:
+    - parameter: dependency_hack_iteration
+      group: sample_iterations
+    actions:
+    - environments:
+      - scope:
+          type: any
+        environment: abaqus_env
+      script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
+            Abaqus_bayesian_matflow/summarise.py>>"
+      script_exe: python_script
+      script_data_in: direct
+      save_files:
+      - trace_plot
+      - posterior_plot
 
 
   command_files:
@@ -195,6 +213,12 @@ template_components:
   - label: idata_chain
     name:
       name: Idata_chain.nc
+  - label: trace_plot
+    name:
+      name: Trace_plot.png
+  - label: posterior_plot
+    name:
+      name: Posterior.png
 
 resources:
   any:
@@ -259,6 +283,8 @@ tasks:
     any:
       scheduler_args:
         options: {}
+  groups:
+  - name: sample_iterations
   inputs:
     x_pickle: ../../../../artifacts/tasks/task_2_create_model_data/e_0/r_0/x.pkl
     y_pickle: ../../../../artifacts/tasks/task_2_create_model_data/e_0/r_0/y.pkl
@@ -271,3 +297,5 @@ tasks:
   sequences:
   - path: inputs.iteration
     values: [0, 1, 2]
+- schema: summarise
+
