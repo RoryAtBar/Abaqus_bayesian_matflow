@@ -151,6 +151,8 @@ template_components:
                sample_model.py>>"
       script_exe: python_script
       script_data_in: direct
+      save_files:
+      - idata_chain
 
 
   command_files:
@@ -190,6 +192,9 @@ template_components:
   - label: gp_model
     name:
       name: gp_model.pkl
+  - label: idata_chain
+    name:
+      name: Idata_chain.nc
 
 resources:
   any:
