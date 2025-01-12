@@ -2,3 +2,4 @@
 .venv
 **.sh.e*
 **.sh.o*
+__pycache__

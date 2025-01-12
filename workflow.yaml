@@ -116,7 +116,8 @@ template_components:
     - parameter: y_validate
     - parameter: n_basis
     - parameter: kernel
-    - parameter: model_name
+    outputs:
+    - parameter: dependency_hack
     actions:
     - environments:
       - scope:
@@ -128,6 +129,50 @@ template_components:
       script_data_in: direct
       save_files:
       - model_vs_abaqus_plots
+      - gp_model
+  - objective: sample_model
+    inputs:
+    - parameter: x_pickle
+    - parameter: y_pickle
+    - parameter: n_basis
+    - parameter: plastic_start_step
+    - parameter: plastic_end_step
+    - parameter: burn_in
+    - parameter: sample_size
+    - parameter: sythetic_mean_basis_coeffs
+    - parameter: variance_dir
+    - parameter: dependency_hack
+    - parameter: iteration
+    outputs:
+    - parameter: dependency_hack_iteration
+    actions:
+    - environments:
+      - scope:
+          type: any
+        environment: abaqus_env
+      script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/\
+               sample_model.py>>"
+      script_exe: python_script
+      script_data_in: direct
+      save_files:
+      - idata_chain
+  - objective: summarise
+    inputs:
+    - parameter: dependency_hack_iteration
+      group: sample_iterations
+    actions:
+    - environments:
+      - scope:
+          type: any
+        environment: abaqus_env
+      script: "<<script:/mnt/iusers01/support/mbexegc2/scratch/\
+            Abaqus_bayesian_matflow/summarise.py>>"
+      script_exe: python_script
+      script_data_in: direct
+      save_files:
+      - trace_plot
+      - posterior_plot
+
   command_files:
   - label: new_inp_file
     name:
@@ -166,6 +211,18 @@ template_components:
     name:
       name: (Basis_func_\d+\.png)
       is_regex: true
+  - label: gp_model
+    name:
+      name: gp_model.pkl
+  - label: idata_chain
+    name:
+      name: Idata_chain.nc
+  - label: trace_plot
+    name:
+      name: Trace_plot.png
+  - label: posterior_plot
+    name:
+      name: Posterior.png
 
 resources:
   any:
@@ -225,4 +282,24 @@ tasks:
   inputs:
     n_basis: 2
     kernel: Auto
-    model_name: Quadplast_timesteps_5-15
+- schema: sample_model
+  resources:
+    any:
+      scheduler_args:
+        options: {}
+  groups:
+  - name: sample_iterations
+  inputs:
+    x_pickle: ../../../../artifacts/tasks/task_2_create_model_data/e_0/r_0/x.pkl
+    y_pickle: ../../../../artifacts/tasks/task_2_create_model_data/e_0/r_0/y.pkl
+    plastic_start_step: 4
+    plastic_end_step: 15
+    burn_in: 100000
+    sample_size: 200000
+    sythetic_mean_basis_coeffs: [46973769.8, 322884.150]
+    variance_dir: /mnt/iusers01/support/mbexegc2/scratch/Abaqus_bayesian_matflow/parallel_core_pymc/Ti64_Flowcurves
+  sequences:
+  - path: inputs.iteration
+    values: [0, 1, 2]
+- schema: summarise
+
