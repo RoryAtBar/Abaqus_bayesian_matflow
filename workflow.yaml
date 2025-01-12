@@ -128,6 +128,7 @@ template_components:
       script_exe: python_script
       script_data_in: direct
       save_files:
+      - model_vs_abaqus_plots
       - gp_model
   - objective: sample_model
     inputs:
@@ -172,7 +173,6 @@ template_components:
       - trace_plot
       - posterior_plot
 
-
   command_files:
   - label: new_inp_file
     name:
@@ -207,6 +207,10 @@ template_components:
   - label: y_pickle
     name:
       name: y.pkl
+  - label: model_vs_abaqus_plots
+    name:
+      name: (Basis_func_\d+\.png)
+      is_regex: true
   - label: gp_model
     name:
       name: gp_model.pkl
